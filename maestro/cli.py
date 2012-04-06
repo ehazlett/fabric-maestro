@@ -20,7 +20,7 @@ from fabric.tasks import execute, WrappedCallableTask
 from fabric.network import disconnect_all
 from maestro import config
 from maestro.core import load_nodes, list_nodes
-import maestro.management
+import maestro.system
 
 def show_tasks():
     """
@@ -30,7 +30,7 @@ def show_tasks():
     
     """
     task_list = []
-    [task_list.append(x[0]) for x in inspect.getmembers(maestro.management) if isinstance(x[1], WrappedCallableTask)]
+    [task_list.append(x[0]) for x in inspect.getmembers(maestro.system) if isinstance(x[1], WrappedCallableTask)]
     return task_list
 
 def parse_tasks(args):
@@ -53,7 +53,7 @@ def parse_nodes(args):
         list_nodes(args.cloud_provider)
     if args.task:
         load_nodes(args.cloud_provider)
-        execute(getattr(maestro.management, args.task))
+        execute(getattr(maestro.system, args.task))
 
 def main():
     """

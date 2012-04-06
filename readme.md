@@ -11,10 +11,10 @@ To use, simply run `fab -l` to see a list of available commands.
 
 For example, to run a memory report for a host named `dev.example.com`:
 
-`fab -H dev.example.com mgmt.memory`
+`fab -H dev.example.com sys.memory`
 
 ```
-[dev.example.com] Executing task 'mgmt.memory'
+[dev.example.com] Executing task 'sys.memory'
 [dev.example.com] out:              total       used       free     shared    buffers     cached
 [dev.example.com] out: Mem:          7948       4076       3871          0       1942        295
 
@@ -25,7 +25,7 @@ Maestro has the ability to use a cloud provider (currently only EC2) for a node 
 
 To run an uptime report for all nodes in EC2 us-east region:
 
-`fab nodes:ec2_us_east mgmt.uptime`
+`fab nodes:ec2_us_east sys.uptime`
 
 ```
 [1.2.3.4] out:  07:26:16 up 49 days, 12:34,  1 user,  load average: 0.00, 0.00, 0.00
