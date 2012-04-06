@@ -35,8 +35,8 @@ def load_env_keys():
     """
     env.provider_keys = {}
     env.provider_keys['ec2'] = {
-        'id': os.environ.get('EC2_ACCESS_ID', None),
-        'key': os.environ.get('EC2_SECRET_KEY', None),
+        'id': os.environ.get('EC2_ACCESS_ID', ''),
+        'key': os.environ.get('EC2_SECRET_KEY', ''),
     }
     # check provider keys
     if not env.provider_keys:
