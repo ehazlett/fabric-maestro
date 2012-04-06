@@ -36,9 +36,5 @@ setup(name='maestro',
         "Operating System :: OS Independent",
         "Topic :: System :: Systems Administration",
         ],
-    entry_points={
-        'console_scripts':
-            ['maestro = maestro.cli:main'],
-        }
     )
 
