@@ -17,7 +17,7 @@ from libcloud.compute.types import NodeState
 from maestro.decorators import valid_provider_required
 from maestro.utils import get_provider_driver, load_env_keys
 
-@task
+
 @valid_provider_required
 def load_nodes(providers=None):
     """
@@ -43,7 +43,18 @@ def load_nodes(providers=None):
         nodes = conn.list_nodes()
         [env.nodes.append(x) for x in nodes]
         [env.hosts.append(x.public_ips[0]) for x in nodes if x.state == NodeState.RUNNING]
-        
+
+@task
+@valid_provider_required
+def nodes(providers=None):
+    """
+    Selects all cloud provider(s) nodes for running the task
+    
+    :param providers: List of cloud provider names ; comma separated (see `maestro.config.AVAILABLE_CLOUD_PROVIDERS`)
+    
+    """
+    load_nodes(providers)
+    
 @task
 @valid_provider_required
 def list_nodes(providers=None):
