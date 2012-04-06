@@ -1,5 +1,5 @@
 # maestro
-Maestro is a [Fabric](http://fabfile.org) based toolkit for managing systems.  There is also integration with Cloud providers via [Apache Libcloud](http://libcloud.apache.org).
+Maestro is a [Fabric](http://fabfile.org) based toolkit for managing systems.  There is also integration with cloud providers via [Apache Libcloud](http://libcloud.apache.org).
 
 # Installation
 
