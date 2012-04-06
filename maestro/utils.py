@@ -12,8 +12,8 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-from fabric.api import env
 import os
+from fabric.api import env
 from maestro import config
 
 def get_provider_driver(provider=None):
@@ -27,6 +27,16 @@ def get_provider_driver(provider=None):
     from libcloud.compute.types import Provider
     from libcloud.compute.providers import get_driver
     return get_driver(Provider.__dict__.get(provider.upper()))
+    
+def load_maestro_rc(rc_file=os.path.expanduser('~/.maestrorc')):
+    """
+    Loads environment variables from Maestro resource file
+    
+    """
+    if os.path.exists(rc_file):
+        for l in open(rc_file).read().splitlines():
+            k,v = l.split('=')
+            os.environ[k] = v
     
 def load_env_keys():
     """

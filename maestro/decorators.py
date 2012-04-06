@@ -13,9 +13,25 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 from functools import wraps
-from maestro import config
 from fabric.api import env
+from maestro import config
+from maestro.utils import load_maestro_rc
 
+def hosts_required(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            if not env.hosts:
+                raise RuntimeError('You must specify a host or hosts')
+            return f(*args, **kwargs)
+        return decorated
+        
+def load_maestro_resource(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        load_maestro_rc()
+        return f(*args, **kwargs)
+    return decorated
+    
 def valid_provider_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -28,11 +44,3 @@ def valid_provider_required(f):
                 ','.join(cloud_providers)))
         return f(*args, **kwargs)
     return decorated
-    
-def hosts_required(f):
-        @wraps(f)
-        def decorated(*args, **kwargs):
-            if not env.hosts:
-                raise RuntimeError('You must specify a host or hosts')
-            return f(*args, **kwargs)
-        return decorated
