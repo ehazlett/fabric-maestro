@@ -1,5 +1,6 @@
 # maestro
-Maestro is a [Fabric](http://fabfile.org) based toolkit for managing systems.
+Maestro is a [Fabric](http://fabfile.org) based toolkit for managing systems.  There is also integration with Cloud providers via [Apache Libcloud](http://libcloud.apache.org).
+
 # Installation
 
 * `git clone https://github.com/ehazlett/maestro`
@@ -47,3 +48,7 @@ For example, create `~/.maestrorc` with the following:
 EC2_ACCESS_ID=123456789
 EC2_SECRET_KEY=abcdefghijlkmnop
 ```
+
+# Credits
+
+* Many thanks to the [Fabric](http://fabfile.org) and [Apache Libcloud](http://libcloud.apache.org) projects.
