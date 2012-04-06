@@ -1,0 +1,5 @@
+Fabric==1.4.0
+apache-libcloud==0.9.1
+pycrypto==2.5
+ssh==1.7.13
+wsgiref==0.1.2
