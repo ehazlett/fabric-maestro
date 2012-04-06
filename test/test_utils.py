@@ -12,7 +12,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-import unittest
+import unittest2
 import sys
 # adjust path to find maestro
 sys.path.append('../')
@@ -20,7 +20,7 @@ from fabric.api import env
 from libcloud.compute.drivers.ec2 import EC2NodeDriver
 from maestro.utils import get_provider_driver, load_env_keys
 
-class TestUtils(unittest.TestCase):
+class TestUtils(unittest2.TestCase):
     @classmethod
     def setUpClass(cls):
         pass
@@ -38,3 +38,4 @@ class TestUtils(unittest.TestCase):
         load_env_keys()
         self.assertTrue(env.has_key('provider_keys'))
         self.assertTrue(env.get('provider_keys').has_key('ec2'))
+        

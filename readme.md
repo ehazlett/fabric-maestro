@@ -23,13 +23,19 @@ For example, to run a memory report for a host named `dev.example.com`:
 # Nodes
 Maestro has the ability to use a cloud provider (currently only EC2) for a node list. 
 
+## Amazon EC2
+To use Amazon EC2, you must set the following environment variables:
+
+`EC2_ACCESS_ID=<your_aws_access_id>`
+`EC2_SECRET_KEY=<your_aws_secret_key>`
+
 To run an uptime report for all nodes in EC2 us-east region:
 
 `fab nodes:ec2_us_east sys.uptime`
 
 ```
-[1.2.3.4] out:  07:26:16 up 49 days, 12:34,  1 user,  load average: 0.00, 0.00, 0.00
-[4.5.6.7] out:  03:26:17 up 34 days, 13:15,  1 user,  load average: 0.00, 0.00, 0.00
+[1.2.3.4] out:  07:26:16 up 49 days, 12:34,  1 user,  load average: 0.32, 0.05, 0.01
+[4.5.6.7] out:  07:26:17 up 34 days, 13:15,  1 user,  load average: 0.22, 0.10, 0.01
 [4.3.2.1] out:  07:26:18 up 23 days, 15:25,  1 user,  load average: 0.17, 0.06, 0.01
 
 ```
