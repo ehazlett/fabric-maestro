@@ -13,6 +13,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 from fabric.api import run, task
+from fabric.utils import puts
 from maestro.config import default_settings
 from maestro.decorators import hosts_required
 
@@ -20,22 +21,31 @@ from maestro.decorators import hosts_required
 @hosts_required
 def memory():
     """
-    Returns system uptime
-    
-    :rtype: string
+    Shows system uptime
     
     """
     with default_settings():
-        return run('free -m | head -2')
+        out = run('free -m')
+        puts(out)
+        
+@task
+@hosts_required
+def run_command(command):
+    """
+    Shows the output from the specified command
+    
+    :param command: Command to execute
+     
+    """
+    with default_settings():
+        puts(run(command))
 
 @task
 @hosts_required
 def uptime():
     """
-    Returns system uptime
-    
-    :rtype: string
+    Shows system uptime
     
     """
     with default_settings():
-        return run('uptime')
+        puts(run('uptime'))

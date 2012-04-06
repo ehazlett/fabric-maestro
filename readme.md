@@ -39,6 +39,15 @@ To run an uptime report for all nodes in EC2 us-east region:
 [4.3.2.1] out:  07:26:18 up 23 days, 15:25,  1 user,  load average: 0.17, 0.06, 0.01
 ```
 
+## Filtering
+You can also filter nodes based upon the machine name (the `Name` tag in EC2) using a regular expression:
+
+`fab nodes:ec2_us_east,^puppet sys.uptime`
+
+```
+[puppet.example.com] 23:17:19 up 50 days,  4:25,  1 user,  load average: 0.00, 0.00, 0.00
+```
+
 ## ~/.maestrorc
 You can put the environment variables in `key=value` form in a file named `.maestrorc` in your home directory.  Maestro will automatically load it and use the values.
 
