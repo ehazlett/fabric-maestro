@@ -1,7 +1,12 @@
-### maestro
+# maestro
 Maestro is a [Fabric](http://fabfile.org) based toolkit for managing systems.
+# Installation
 
-### Usage
+* `git clone https://github.com/ehazlett/maestro`
+* `mkvirtualenv maestro` or `virtualenv maestro`
+* `pip install -r requirements.txt` or `source /path/to/virtualenv/bin/activate && pip install -r requirements.txt`
+
+# Usage
 To use, simply run `fab -l` to see a list of available commands. 
 
 For example, to run a memory report for a host named `dev.example.com`:
@@ -15,7 +20,7 @@ For example, to run a memory report for a host named `dev.example.com`:
 
 ```
 
-## Nodes
+# Nodes
 Maestro has the ability to use a cloud provider (currently only EC2) for a node list. 
 
 To run an uptime report for all nodes in EC2 us-east region:
