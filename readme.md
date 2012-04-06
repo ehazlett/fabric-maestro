@@ -40,7 +40,7 @@ To run an uptime report for all nodes in EC2 us-east region:
 
 ```
 
-## maestrorc
+## ~/.maestrorc
 You can put the environment variables in `key=value` form in a file named `.maestrorc` in your home directory.  Maestro will automatically load it and use the values.
 
 For example, create `~/.maestrorc` with the following:
