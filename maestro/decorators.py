@@ -18,12 +18,12 @@ from maestro import config
 from maestro.utils import load_maestro_rc
 
 def hosts_required(f):
-        @wraps(f)
-        def decorated(*args, **kwargs):
-            if not env.hosts:
-                raise RuntimeError('You must specify a host or hosts')
-            return f(*args, **kwargs)
-        return decorated
+   @wraps(f)
+   def decorated(*args, **kwargs):
+       if not env.hosts:
+           raise RuntimeError('You must specify a host or hosts')
+       return f(*args, **kwargs)
+   return decorated
         
 def load_maestro_resource(f):
     @wraps(f)
@@ -35,12 +35,19 @@ def load_maestro_resource(f):
 def valid_provider_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
+        # cleanup this function?
         cloud_providers = config.AVAILABLE_CLOUD_PROVIDERS
-        if not args and not kwargs or len(args) < 1 and len(kwargs) < 1:
+        invalid_provider = False
+        if not args and not kwargs:
             raise RuntimeError('You must specify a provider')
-        if len(args) > 0 and args[0].lower() not in cloud_providers \
-            or len(kwargs) > 0 and kwargs['provider'] not in cloud_providers:
-            raise ValueError('Invalid provider.  Available: {0}'.format( \
-                ','.join(cloud_providers)))
+        if len(args) > 0 and args[0].lower() not in cloud_providers:
+            invalid_provider = True
+        if len(kwargs) > 0:
+            for p in kwargs['providers'].split(','):
+                if p not in cloud_providers:
+                    invalid_provider = p
+        if invalid_provider:
+            raise ValueError('Invalid provider {0}.  Available: {1}'.format( \
+                invalid_provider, ','.join(cloud_providers)))
         return f(*args, **kwargs)
     return decorated

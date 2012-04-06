@@ -12,14 +12,19 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-
 from fabric.context_managers import settings, hide
+import fabric.state
 import libcloud.security
 import platform
 
 # don't verify ssl certs (doesn't work on os x)
 if platform.mac_ver():
     libcloud.security.VERIFY_SSL_CERT = False
+
+# to hide 'running', this must be at the global level 
+#   https://github.com/fabric/fabric/issues/424
+fabric.state.output['running'] = False
+fabric.state.output['status'] = False
 
 AVAILABLE_CLOUD_PROVIDERS = (
     'ec2',
@@ -34,6 +39,6 @@ def default_settings():
     
     """
     defaults = settings(
-        hide('running'),
+        hide('running', 'stdout', 'stderr'),
     )
     return defaults

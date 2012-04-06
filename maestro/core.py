@@ -12,6 +12,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
+import re
 from fabric.api import task, env
 from libcloud.compute.types import NodeState
 from maestro.decorators import valid_provider_required
@@ -19,17 +20,21 @@ from maestro.utils import get_provider_driver, load_env_keys
 
 
 @valid_provider_required
-def load_nodes(providers=None):
+def load_nodes(providers=None, filter=None):
     """
     Uses a cloud provider(s) for the node list (i.e. ec2)
     
     :param providers: List of cloud provider names ; comma separated (see `maestro.config.AVAILABLE_CLOUD_PROVIDERS`)
+    :param filter: Regular expression for filtering nodes
     
     """
     load_env_keys()
     connections = {}
     env.nodes = []
     env.hosts = []
+    filter = filter if filter else '.*'
+    print(filter)
+    regex = re.compile(filter)
     for p in providers.split(','):
         Driver = get_provider_driver(p)
         # check for ec2 east/west and use ec2 keys
@@ -41,31 +46,33 @@ def load_nodes(providers=None):
         connections[p] = conn
     for k,conn in connections.iteritems():
         nodes = conn.list_nodes()
-        [env.nodes.append(x) for x in nodes]
-        [env.hosts.append(x.public_ips[0]) for x in nodes if x.state == NodeState.RUNNING]
+        [env.nodes.append(x) for x in nodes if regex.match(x.name)]
+        [env.hosts.append(x.public_ips[0]) for x in nodes if x.state == NodeState.RUNNING \
+            and regex.match(x.name)]
 
 @task
 @valid_provider_required
-def nodes(providers=None):
+def nodes(providers=None, filter=None):
     """
     Selects all cloud provider(s) nodes for running the task
     
     :param providers: List of cloud provider names ; comma separated (see `maestro.config.AVAILABLE_CLOUD_PROVIDERS`)
+    :param filter: Regular expression for filtering nodes
     
     """
-    load_nodes(providers)
+    load_nodes(providers=providers, filter=filter)
     
 @task
 @valid_provider_required
-def list_nodes(providers=None):
+def list_nodes(providers=None, filter=None):
     """
-    Gets all nodes for specified providers
+    Shows nodes for specified providers
     
     :param providers: List of cloud provider names ; comma separated (see `maestro.config.AVAILABLE_CLOUD_PROVIDERS`)
-    :rtype: List of nodes
+    :param filter: Regular expression for filtering nodes
     
     """
-    load_nodes(providers)
+    load_nodes(providers=providers, filter=filter)
     for n in env.nodes:
         public_ip = n.public_ips[0] if n.public_ips else ''
         private_ip = n.private_ips[0] if n.private_ips else ''

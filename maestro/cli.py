@@ -19,6 +19,7 @@ from fabric.api import env
 from fabric.tasks import execute, WrappedCallableTask
 from fabric.network import disconnect_all
 from maestro import config
+from maestro.utils import load_maestro_rc
 from maestro.core import load_nodes, list_nodes
 import maestro.system
 
@@ -60,6 +61,7 @@ def main():
     Main entry point for CLI
     
     """
+    load_maestro_rc()
     parser = ArgumentParser(prog='maestro', description='DevOps management')
     sub = parser.add_subparsers()
     sub_tasks = sub.add_parser('tasks', help='Tasks')
