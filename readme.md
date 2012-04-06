@@ -51,4 +51,4 @@ EC2_SECRET_KEY=abcdefghijlkmnop
 
 # Credits
 
-* Many thanks to the [Fabric](http://fabfile.org) and [Apache Libcloud](http://libcloud.apache.org) projects.
+* Many thanks to the [Fabric](http://fabfile.org) and [Apache Libcloud](http://libcloud.apache.org) projects for making my job easier :)
