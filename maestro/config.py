@@ -30,6 +30,7 @@ AVAILABLE_CLOUD_PROVIDERS = (
     'ec2',
     'ec2_us_east',
     'ec2_us_west',
+    'rackspace',
 )
 def default_settings():
     """
