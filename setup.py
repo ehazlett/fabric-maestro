@@ -13,17 +13,19 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 from distutils.core import setup
+import maestro
 
 setup(name='maestro',
-    version = '0.1.0',
+    version = maestro.__version__,
     author = 'Evan Hazlett',
     author_email = 'ejhazlett@gmail.com',
     packages = ['maestro'],
     description = 'DevOps management',
+    url = 'https://github.com/ehazlett/maestro',
     license = 'License :: OSI Approved :: Apache Software License',
     long_description = """
     DevOps management""",
-    install_requires = ['Fabric>=1.4.0', 'apache-libcloud>=0.9.1', 'argparse>=1.1'],
+    install_requires = ['Fabric>=1.4.0', 'apache-libcloud>=0.9.1', 'argparse>=1.2'],
     platforms = [
         "All",
         ],

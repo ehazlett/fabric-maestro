@@ -26,8 +26,10 @@ Maestro has the ability to use a cloud provider (currently EC2 and Rackspace) fo
 ## Amazon EC2
 To use Amazon EC2, you must set the following environment variables:
 
-`EC2_ACCESS_ID=<your_aws_access_id>`
-`EC2_SECRET_KEY=<your_aws_secret_key>`
+```
+EC2_ACCESS_ID=<your_aws_access_id>
+EC2_SECRET_KEY=<your_aws_secret_key>
+```
 
 To run an uptime report for all nodes in EC2 us-east region:
 
@@ -42,8 +44,10 @@ To run an uptime report for all nodes in EC2 us-east region:
 ## Rackspace Cloud
 To use Amazon EC2, you must set the following environment variables:
 
-`RACKSPACE_ID=<username>`
-`RACKSPACE_KEY=<api_key>`
+```
+RACKSPACE_ID=<username>
+RACKSPACE_KEY=<api_key>
+```
 
 To run an uptime report for all nodes in EC2 us-east region:
 
@@ -73,6 +77,19 @@ EC2_SECRET_KEY=abcdefghijlkmnop
 RACKSPACE_ID=rackspaceuser
 RACKSPACE_KEY=800012345abcdefg12345
 ```
+
+# Using Maestro from a custom fabfile
+To use Maestro from a custom `fabfile` simply add the following to your fabfile:
+
+```python
+from maestro.core import *
+from maestro import system as sys
+# optional -- ~/.maestrorc loader
+from maestro.utils import load_maestro_rc
+load_maestro_rc()
+```
+
+You should then be able to run `fab -l` and see the Maestro tasks.
 
 # Credits
 
