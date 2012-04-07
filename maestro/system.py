@@ -12,8 +12,9 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-from fabric.api import run, task
+from fabric.api import run, task, sudo
 from fabric.utils import puts
+from fabric.operations import open_shell
 from maestro.config import default_settings
 from maestro.decorators import hosts_required
 
@@ -25,8 +26,7 @@ def memory():
     
     """
     with default_settings():
-        out = run('free -m')
-        puts(out)
+        run('free -m')
         
 @task
 @hosts_required
@@ -38,8 +38,36 @@ def run_command(command):
      
     """
     with default_settings():
-        puts(run(command))
+        run(command)
+        
+@task
+@hosts_required
+def shell():
+    """
+    Spawns a shell on the remote instance
+    
+    """
+    open_shell()
+    
+@task
+@hosts_required
+def update_check():
+    """
+    Shows update status
+    
+    """
+    with default_settings():
+        run('cat /var/lib/update-notifier/updates-available')
 
+@task
+@hosts_required
+def update_system():
+    """
+    Updates system
+    
+    """
+    sudo('apt-get update && apt-get -y upgrade')
+    
 @task
 @hosts_required
 def uptime():
@@ -48,4 +76,4 @@ def uptime():
     
     """
     with default_settings():
-        puts(run('uptime'))
+        run('uptime')

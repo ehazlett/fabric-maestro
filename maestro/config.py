@@ -24,7 +24,6 @@ if platform.mac_ver():
 # to hide 'running', this must be at the global level 
 #   https://github.com/fabric/fabric/issues/424
 fabric.state.output['running'] = False
-fabric.state.output['status'] = False
 
 AVAILABLE_CLOUD_PROVIDERS = (
     'ec2',
@@ -40,6 +39,6 @@ def default_settings():
     
     """
     defaults = settings(
-        hide('running', 'stdout', 'stderr'),
+        hide('running',),
     )
     return defaults
