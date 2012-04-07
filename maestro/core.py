@@ -33,7 +33,6 @@ def load_nodes(providers=None, filter=None):
     env.nodes = []
     env.hosts = []
     filter = filter if filter else '.*'
-    print(filter)
     regex = re.compile(filter)
     for p in providers.split(','):
         Driver = get_provider_driver(p)
