@@ -91,6 +91,9 @@ load_maestro_rc()
 
 You should then be able to run `fab -l` and see the Maestro tasks.
 
+# Contributing
+Forking encouraged :)  For bugs, features, etc. please use Github issues.
+
 # Credits
 
 * Many thanks to the [Fabric](http://fabfile.org) and [Apache Libcloud](http://libcloud.apache.org) projects for making my job easier :)
