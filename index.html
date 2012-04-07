@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Maestro by ehazlett</title>
+    
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Maestro</h1>
+        <p>DevOps management</p>
+        <p class="view"><a href="https://github.com/ehazlett/maestro">View the Project on GitHub <small>ehazlett/maestro</small></a></p>
+        <ul>
+          <li><a href="https://github.com/ehazlett/maestro/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/ehazlett/maestro/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/ehazlett/maestro">Fork On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>Maestro is a <a href="http://fabfile.org">Fabric</a> based toolkit for managing systems.  There is also integration with cloud providers (currently Amazon EC2 and Rackspace) via <a href="http://libcloud.apache.org">Apache Libcloud</a>.</p>
+
+<h1>Installation</h1>
+
+<ul>
+<li><code>pip install maestro</code></li>
+</ul><h1>Usage</h1>
+
+<p>Either download the <a href="https://github.com/ehazlett/maestro/blob/master/fabfile.py">included</a> fabfile or create your own:</p>
+
+<div class="highlight">
+<pre><span class="kn">from</span> <span class="nn">maestro.core</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">maestro</span> <span class="kn">import</span> <span class="n">system</span> <span class="k">as</span> <span class="n">sys</span>
+</pre>
+</div>
+
+
+<p>You can then run <code>fab -l</code> to see the available tasks.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/ehazlett">ehazlett</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+  </body>
+</html>
