@@ -70,6 +70,8 @@ For example, create `~/.maestrorc` with the following:
 ```
 EC2_ACCESS_ID=123456789
 EC2_SECRET_KEY=abcdefghijlkmnop
+RACKSPACE_ID=rackspaceuser
+RACKSPACE_KEY=800012345abcdefg12345
 ```
 
 # Credits
