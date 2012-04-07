@@ -15,6 +15,7 @@
 from fabric.api import run, task, sudo
 from fabric.utils import puts
 from fabric.operations import open_shell
+from fabric.context_managers import settings
 from maestro.config import default_settings
 from maestro.decorators import hosts_required
 
@@ -47,7 +48,8 @@ def shell():
     Spawns a shell on the remote instance
     
     """
-    open_shell()
+    with settings(parallel=False):
+        open_shell()
     
 @task
 @hosts_required
