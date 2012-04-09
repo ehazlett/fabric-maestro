@@ -3,12 +3,17 @@ Maestro is a [Fabric](http://fabfile.org) based toolkit for managing systems.  T
 
 # Installation
 
-* `git clone https://github.com/ehazlett/maestro`
-* `mkvirtualenv maestro` or `virtualenv maestro`
-* `pip install -r requirements.txt` or `source /path/to/virtualenv/bin/activate && pip install -r requirements.txt`
+* `pip install maestro`
 
 # Usage
-To use, simply run `fab -l` to see a list of available commands. 
+Either download the [default](https://github.com/ehazlett/maestro/blob/master/fabfile.py) fabfile or create your own:
+
+```python
+from maestro.core import *
+from maestro import system as sys
+```
+
+You can then run `fab -l` to see the available tasks.
 
 For example, to run a memory report for a host named `dev.example.com`:
 
