@@ -47,14 +47,14 @@ To run an uptime report for all nodes in EC2 us-east region:
 ```
 
 ## Rackspace Cloud
-To use Amazon EC2, you must set the following environment variables:
+To use Rackspace, you must set the following environment variables:
 
 ```
 RACKSPACE_ID=<username>
 RACKSPACE_KEY=<api_key>
 ```
 
-To run an uptime report for all nodes in EC2 us-east region:
+To run an uptime report for all nodes:
 
 `fab nodes:rackspace sys.uptime`
 
