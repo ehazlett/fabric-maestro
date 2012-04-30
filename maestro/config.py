@@ -18,10 +18,14 @@ from libcloud.compute.types import Provider
 import libcloud.security
 import platform
 import logging
+import ssh
 
-LOG_LEVEL = logging.DEBUG
-FORMAT = "%(levelname)-10s %(message)s"
+LOG_LEVEL = logging.INFO
+FORMAT = "%(levelname)-10s %(name)s %(message)s"
 logging.basicConfig(format=FORMAT, level=LOG_LEVEL)
+
+ssh_logger = logging.getLogger('ssh.transport')
+ssh_logger.setLevel(logging.WARN)
 
 # don't verify ssl certs (doesn't work on os x)
 if platform.mac_ver():
