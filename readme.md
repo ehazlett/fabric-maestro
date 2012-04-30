@@ -26,7 +26,13 @@ For example, to run a memory report for a host named `dev.example.com`:
 ```
 
 # Nodes
-Maestro has the ability to use a cloud provider (currently EC2 and Rackspace) for a node list. 
+Maestro has the ability to use a cloud provider (currently EC2 and Rackspace) for a node list.
+
+* You can optionally specify a specific region to only show those nodes.  By default, all regions will be used.
+
+To see a list of available regions, run:
+
+`fab list_available_providers`
 
 ## Amazon EC2
 To use Amazon EC2, you must set the following environment variables:
@@ -35,15 +41,22 @@ To use Amazon EC2, you must set the following environment variables:
 EC2_ACCESS_ID=<your_aws_access_id>
 EC2_SECRET_KEY=<your_aws_secret_key>
 ```
+To run an uptime report for all nodes in EC2:
 
-To run an uptime report for all nodes in EC2 us-east region:
-
-`fab nodes:ec2_us_east sys.uptime`
+`fab nodes:ec2 sys.uptime`
 
 ```
 [1.2.3.4] 07:26:16 up 49 days, 12:34,  1 user,  load average: 0.32, 0.05, 0.01
 [4.5.6.7] 07:26:17 up 34 days, 13:15,  1 user,  load average: 0.22, 0.10, 0.01
 [4.3.2.1] 07:26:18 up 23 days, 15:25,  1 user,  load average: 0.17, 0.06, 0.01
+```
+
+To run an uptime report for all nodes in EC2 us-east-1 region:
+
+`fab nodes:ec2,us-east-1 sys.uptime`
+
+```
+[1.2.3.4] 07:26:16 up 49 days, 12:34,  1 user,  load average: 0.32, 0.05, 0.01
 ```
 
 ## Rackspace Cloud
@@ -65,7 +78,7 @@ To run an uptime report for all nodes:
 ## Filtering
 You can also filter nodes based upon the machine name (the `Name` tag in EC2) using a regular expression:
 
-`fab nodes:ec2_us_east,^puppet sys.uptime`
+`fab nodes:ec2,filter=^puppet sys.uptime`
 
 ```
 [puppet.example.com] 23:17:19 up 50 days,  4:25,  1 user,  load average: 0.00, 0.00, 0.00

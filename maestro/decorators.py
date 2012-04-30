@@ -43,9 +43,10 @@ def valid_provider_required(f):
         if len(args) > 0 and args[0].lower() not in cloud_providers:
             invalid_provider = True
         if len(kwargs) > 0:
-            for p in kwargs['providers'].split(','):
-                if p not in cloud_providers:
-                    invalid_provider = p
+            if 'providers' in kwargs:
+                for p in kwargs['providers'].split(','):
+                    if p not in cloud_providers:
+                        invalid_provider = p
         if invalid_provider:
             raise ValueError('Invalid provider {0}.  Available: {1}'.format( \
                 invalid_provider, ','.join(cloud_providers)))

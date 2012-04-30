@@ -26,21 +26,28 @@ class TestUtils(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         pass
-        
+
     @classmethod
     def tearDownClass(cls):
         pass
-    
-    def test_get_ec2_provider_driver(self):
+
+    def test_get_ec2_provider_driver_us_east_1(self):
         ec2 = EC2NodeDriver(None, None)
-        drv = get_provider_driver('ec2')
-        self.assertTrue(isinstance(ec2, drv))
-            
+        region = 'us-east-1'
+        drv = get_provider_driver('ec2', region)
+        self.assertTrue(drv.region_name, region)
+
+    def test_get_ec2_provider_driver_us_west_1(self):
+        ec2 = EC2NodeDriver(None, None)
+        region = 'us-west-1'
+        drv = get_provider_driver('ec2', region)
+        self.assertTrue(drv.region_name, region)
+
     def test_load_env_keys(self):
         load_env_keys()
         self.assertTrue(env.has_key('provider_keys'))
         self.assertTrue(env.get('provider_keys').has_key('ec2'))
-        
+
     def test_load_maestro_rc(self):
         testrc = tempfile.mktemp()
         ec2_id = '12345'

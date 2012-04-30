@@ -16,7 +16,7 @@ import os
 from fabric.api import env
 from maestro import config
 
-def get_provider_driver(provider=None):
+def get_provider_driver(provider=None, region=None):
     """
     Gets the specified libcloud driver
     
@@ -26,7 +26,12 @@ def get_provider_driver(provider=None):
     """
     from libcloud.compute.types import Provider
     from libcloud.compute.providers import get_driver
-    return get_driver(Provider.__dict__.get(provider.upper()))
+    provider_driver = config.AVAILABLE_CLOUD_REGIONS.get(provider, {}).get(region, None)
+    if not provider_driver:
+        # get the first in the list
+        regions = config.AVAILABLE_CLOUD_REGIONS.get(provider)
+        provider_driver = regions[regions.keys()[0]]
+    return get_driver(provider_driver)
     
 def load_maestro_rc(rc_file=os.path.expanduser('~/.maestrorc')):
     """
