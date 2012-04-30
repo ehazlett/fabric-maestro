@@ -14,6 +14,7 @@
 #    limitations under the License.
 from fabric.context_managers import settings, hide
 import fabric.state
+from libcloud.compute.types import Provider
 import libcloud.security
 import platform
 
@@ -31,6 +32,21 @@ AVAILABLE_CLOUD_PROVIDERS = (
     'ec2_us_west',
     'rackspace',
 )
+AVAILABLE_CLOUD_REGIONS = {
+    'ec2': {
+        'us-east-1': Provider.EC2_US_EAST,
+        'us-west-1': Provider.EC2_US_WEST,
+        'us-west-2': Provider.EC2_US_WEST_OREGON,
+        'eu-west-1': Provider.EC2_EU_WEST,
+    },
+    'rackspace': {
+        'dfw': Provider.RACKSPACE,
+        'uk': Provider.RACKSPACE_UK,
+    },
+    'vcloud': {
+        'default': Provider.VCLOUD,
+    }
+}
 def default_settings():
     """
     Returns a default settings object for tasks
