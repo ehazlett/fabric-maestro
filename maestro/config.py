@@ -17,6 +17,11 @@ import fabric.state
 from libcloud.compute.types import Provider
 import libcloud.security
 import platform
+import logging
+
+LOG_LEVEL = logging.DEBUG
+FORMAT = "%(levelname)-10s %(message)s"
+logging.basicConfig(format=FORMAT, level=LOG_LEVEL)
 
 # don't verify ssl certs (doesn't work on os x)
 if platform.mac_ver():

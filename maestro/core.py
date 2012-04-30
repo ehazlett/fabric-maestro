@@ -18,6 +18,9 @@ from libcloud.compute.types import NodeState
 from maestro.decorators import valid_provider_required
 from maestro.utils import get_provider_driver, load_env_keys
 import config
+import logging
+
+log = logging.getLogger(__name__)
 
 def get_nodes(provider=None, region=None):
     """
@@ -27,14 +30,20 @@ def get_nodes(provider=None, region=None):
     :param region: Name of region
 
     """
-    Driver = get_provider_driver(provider)
+    Driver = get_provider_driver(provider, region)
+    nodes = []
     # check for ec2 east/west and use ec2 keys
     if provider.find('ec2') > -1:
         pk = env.provider_keys.get('ec2')
     else:
         pk = env.provider_keys[provider]
-    conn = Driver(pk.get('id'), pk.get('key'))
-    connections[provider] = conn
+    try:
+        log.debug('Getting nodes for {0} in {1}'.format(provider, region))
+        conn = Driver(pk.get('id'), pk.get('key'))
+        nodes = conn.list_nodes()
+    except Exception, e:
+        log.warn('Unable to connect to {0} for {1}: {2}'.format(region, provider, e))
+    return nodes
 
 @valid_provider_required
 def load_nodes(providers=None, regions='', filter=None):
@@ -43,6 +52,7 @@ def load_nodes(providers=None, regions='', filter=None):
 
     :param providers: List of cloud provider names ; comma separated (see `maestro.config.AVAILABLE_CLOUD_PROVIDERS`)
     :param regions: List of cloud provider regions ; comma separated (see `maestro.config.AVAILABLE_CLOUD_REGIONS`)
+        * If `regions` is not defined, all regions are used
     :param filter: Regular expression for filtering nodes
 
     """
@@ -58,19 +68,19 @@ def load_nodes(providers=None, regions='', filter=None):
         else:
             regions = regions.split(',')
         for r in regions:
-            Driver = get_provider_driver(p, r)
-            # check for ec2 east/west and use ec2 keys
-            if p.find('ec2') > -1:
-                pk = env.provider_keys.get('ec2')
-            else:
-                pk = env.provider_keys[p]
-            conn = Driver(pk.get('id'), pk.get('key'))
-            connections[p] = conn
-            for k,conn in connections.iteritems():
-                nodes = conn.list_nodes()
-                [env.nodes.append(x) for x in nodes if regex.match(x.name)]
-                [env.hosts.append(x.public_ips[0]) for x in nodes if x.state == NodeState.RUNNING \
-                    and regex.match(x.name)]
+            nodes = get_nodes(p, r)
+            [env.nodes.append(x) for x in nodes if regex.match(x.name)]
+            [env.hosts.append(x.public_ips[0]) for x in nodes if x.state == NodeState.RUNNING \
+                and regex.match(x.name)]
+@task
+def list_available_providers():
+    """
+    Lists available providers and regions
+
+    """
+    regions = config.AVAILABLE_CLOUD_REGIONS
+    for k,v in regions.iteritems():
+        print('{0:12s}: {1}'.format(k, ', '.join(regions[k].keys())))
 
 @task
 @valid_provider_required
@@ -80,6 +90,7 @@ def nodes(providers=None, regions=None, filter=None):
 
     :param providers: List of cloud provider names ; comma separated (see `maestro.config.AVAILABLE_CLOUD_PROVIDERS`)
     :param regions: List of cloud provider regions ; comma separated (see `maestro.config.AVAILABLE_CLOUD_REGIONS`)
+        * If `regions` is not defined, all regions are used
     :param filter: Regular expression for filtering nodes
 
     """
@@ -93,6 +104,7 @@ def list_nodes(providers=None, regions=None, filter=None):
 
     :param providers: List of cloud provider names ; comma separated (see `maestro.config.AVAILABLE_CLOUD_PROVIDERS`)
     :param regions: List of cloud provider regions ; comma separated (see `maestro.config.AVAILABLE_CLOUD_REGIONS`)
+        * If `regions` is not defined, all regions are used
     :param filter: Regular expression for filtering nodes
 
     """
