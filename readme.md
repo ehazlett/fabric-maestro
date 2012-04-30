@@ -28,7 +28,7 @@ For example, to run a memory report for a host named `dev.example.com`:
 # Nodes
 Maestro has the ability to use a cloud provider (currently EC2 and Rackspace) for a node list.
 
-* You can optionally specify a specific region to only show those nodes.  By default, all regions will be used.
+You can optionally specify a specific region to only show those nodes.  By default, all regions will be used.
 
 To see a list of available regions, run:
 
