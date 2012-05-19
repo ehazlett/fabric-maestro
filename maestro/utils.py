@@ -15,38 +15,38 @@
 import os
 from fabric.api import env
 from maestro import config
+from libcloud.compute.types import Provider
+from libcloud.compute.providers import get_driver
 
 def get_provider_driver(provider=None, region=None):
     """
     Gets the specified libcloud driver
-    
+
     :param provider: Name of the driver
     :rtype: `libcloud.compute.base.NodeDriver`
-    
+
     """
-    from libcloud.compute.types import Provider
-    from libcloud.compute.providers import get_driver
     provider_driver = config.AVAILABLE_CLOUD_REGIONS.get(provider, {}).get(region, None)
     if not provider_driver:
         # get the first in the list
         regions = config.AVAILABLE_CLOUD_REGIONS.get(provider)
         provider_driver = regions[regions.keys()[0]]
     return get_driver(provider_driver)
-    
+
 def load_maestro_rc(rc_file=os.path.expanduser('~/.maestrorc')):
     """
     Loads environment variables from Maestro resource file
-    
+
     """
     if os.path.exists(rc_file):
         for l in open(rc_file).read().splitlines():
             k,v = l.split('=')
             os.environ[k] = v
-    
+
 def load_env_keys():
     """
     Loads cloud provider keys from environment into maestro config
-    
+
     """
     env.provider_keys = {}
     env.provider_keys['ec2'] = {
@@ -62,4 +62,3 @@ def load_env_keys():
     # check provider keys
     if not env.provider_keys:
         raise RuntimeError('You must use environment variables to use cloud nodes.  See the documentation for details')
-        
