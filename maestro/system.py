@@ -84,9 +84,9 @@ def update_system(dist_upgrade=False):
 
     """
     upgrade = "apt-get -y upgrade"
-    if dist_upgrade or dist_upgrade.lower() == 'true':
+    if dist_upgrade or type(dist_upgrade) == type(str) and dist_upgrade.lower() == 'true':
         upgrade = "apt-get -y dist-upgrade"
-    sudo('apt-get update && apt-get -y {0}'.format(upgrade))
+    sudo('apt-get update && {0}'.format(upgrade))
 
 @task
 @hosts_required
