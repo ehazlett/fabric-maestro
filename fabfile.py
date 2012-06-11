@@ -14,6 +14,7 @@
 #    limitations under the License.
 from maestro.core import *
 from maestro import system as sys
+from maestro.deploy import python as py
 from maestro.utils import load_maestro_rc
 # load the maestro resource file for provider keys
 load_maestro_rc()
