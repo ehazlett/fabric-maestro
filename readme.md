@@ -136,6 +136,18 @@ This will create the application directory, setup supervisor to run uWSGI, and c
 
 ## Deploy an application
 
+To deploy an application, make sure there is a `wsgi.py` module in the root of the application.  Here is an example for a Django app:
+
+```
+import os
+import django.core.handlers.wsgi
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "piiprovider.settings")
+
+application = django.core.handlers.wsgi.WSGIHandler()
+```
+
+### Deploy
+
 `fab -H 10.1.2.3 py.deploy:myapp,/path/to/myapp/source`
 
 You can also deploy using git:
