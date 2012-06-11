@@ -109,6 +109,45 @@ load_maestro_rc()
 
 You should then be able to run `fab -l` and see the Maestro tasks.
 
+# Applications
+
+There is also experimental support for creating and deploying Python applications (more languages and frameworks will be included in the future).
+
+** Note: this assumes you have the following packages installed (these are for debian/ubuntu):
+
+ * build-essential
+ * python-dev
+ * python-setuptools
+ * libxml2-dev
+ * libxslt-dev
+ * supervisor
+ * nginx
+
+** You will also need to install uWSGI:
+
+ * `sudo easy_install pip`
+ * `sudo pip install uwsgi`
+ 
+## Create an application
+
+`fab -H 10.1.2.3 py.create_app:myapp,"myapp.mydomain.com"`
+
+This will create the application directory, setup supervisor to run uWSGI, and create an nginx config.
+
+## Deploy an application
+
+`fab -H 10.1.2.3 py.deploy:myapp,/path/to/myapp/source`
+
+You can also deploy using git:
+
+`fab -H 10.1.2.3 py.deploy:myapp,https://github.com/username/myapp`
+
+When deploying, Maestro will upload or pull the latest source, install packages for the virtualenv (from a `requirements.txt` located in the root directory of your app), and restart the application.
+
+## Delete an application
+
+`fab -H 10.1.2.3 py.delete_app:myapp`
+
 # Contributing
 Forking encouraged :)  For bugs, features, etc. please use Github issues.
 
