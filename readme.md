@@ -127,7 +127,8 @@ There is also experimental support for creating and deploying Python application
 
  * `sudo easy_install pip`
  * `sudo pip install uwsgi`
- 
+ * `sudo pip install virtualenv`
+
 ## Create an application
 
 `fab -H 10.1.2.3 py.create_app:myapp,"myapp.mydomain.com"`

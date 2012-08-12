@@ -39,7 +39,10 @@ def run_command(command):
 
     """
     with default_settings():
-        run(command)
+        try:
+            run(command)
+        except: # ignore python traceback output from command that returns non-zero
+            pass
 
 @task
 @hosts_required

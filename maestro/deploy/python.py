@@ -101,7 +101,7 @@ def create_app(name=None, urls=None, py_version='26', app_dir='/opt/apps', ve_di
         raise RuntimeError('You must specify an name and urls')
     with default_settings():
         # create app directory
-        run('mkdir -p {0}'.format(os.path.join(app_dir, name)))
+        sudo('mkdir -p {0}'.format(os.path.join(app_dir, name)))
         # create supervisor config
         uwsgi_tmp_conf = tempfile.mktemp()
         with open(uwsgi_tmp_conf, 'w') as f:
@@ -110,8 +110,8 @@ def create_app(name=None, urls=None, py_version='26', app_dir='/opt/apps', ve_di
         # create nginx config
         with open(nginx_tmp_conf, 'w') as f:
             f.write(generate_nginx_config(app_name=name, urls=urls.split(';')))
-        put(uwsgi_tmp_conf, '/etc/supervisor/conf.d/uwsgi-{0}.conf'.format(name), mode=0755)
-        put(nginx_tmp_conf, '/etc/nginx/conf.d/{0}.conf'.format(name), mode=0755)
+        put(uwsgi_tmp_conf, '/etc/supervisor/conf.d/uwsgi-{0}.conf'.format(name), mode=0755, use_sudo=True)
+        put(nginx_tmp_conf, '/etc/nginx/conf.d/{0}.conf'.format(name), mode=0755, use_sudo=True)
         # update supervisor
         sudo('supervisorctl update')
         # cleanup
@@ -132,15 +132,16 @@ def deploy(name=None, source=None, app_dir='/opt/apps', ve_dir='/opt/ve'):
     """
     if not name or not source:
         raise RuntimeError('You must specify a name and source')
+    sudo('mkdir -p {0}'.format(ve_dir))
     # build ve
     with cd(ve_dir):
-        run('virtualenv --no-site-packages {0}'.format(name))
+        sudo('virtualenv --no-site-packages {0}'.format(name))
     # look for git repo
     tmp_deploy_dir = os.path.join('/tmp', ''.join(Random().sample(string.letters+string.digits, 8)))
-    run('mkdir -p {0}'.format(tmp_deploy_dir))
+    sudo('mkdir -p {0} ; chmod -R o+rw {0}'.format(tmp_deploy_dir))
     with cd(tmp_deploy_dir):
         if source.startswith('http') or source.startswith('git'):
-            run('git clone {0} {1}'.format(source, name))
+            sudo('git clone {0} {1}'.format(source, name))
         else:
             # upload
             if not os.path.exists(source):
@@ -151,15 +152,15 @@ def deploy(name=None, source=None, app_dir='/opt/apps', ve_dir='/opt/ve'):
             with hide('stdout'):
                 rsync_project('{0}/{1}'.format(tmp_deploy_dir, name), source, exclude=['*.git', '*.swp'])
         # build env
-        run('{0}/bin/pip install --use-mirrors -r {1}/requirements.txt'.format(os.path.join(ve_dir, name), name))
+        sudo('{0}/bin/pip install --use-mirrors -r {1}/requirements.txt'.format(os.path.join(ve_dir, name), name))
     with cd('{0}'.format(app_dir)):
         # replace existing app
-        run('cp -rf {0}/* ./{1}/'.format(os.path.join(tmp_deploy_dir, name), name))
+        sudo('cp -rf {0}/* ./{1}/'.format(os.path.join(tmp_deploy_dir, name), name))
     # reload supervisor
     sudo('supervisorctl restart uwsgi-{0}'.format(name))
     sudo('service nginx reload')
     # cleanup
-    run('rm -rf {0}'.format(tmp_deploy_dir))
+    sudo('rm -rf {0}'.format(tmp_deploy_dir))
 
 @task
 @hosts_required
@@ -190,11 +191,11 @@ def delete_app(name=None, app_dir='/opt/apps', ve_dir='/opt/ve'):
         raise RuntimeError('You must specify a name')
     with default_settings():
         # remove configs
-        run('rm /etc/nginx/conf.d/{0}.conf'.format(name))
-        run('rm /etc/supervisor/conf.d/uwsgi-{0}.conf'.format(name))
+        sudo('rm /etc/nginx/conf.d/{0}.conf'.format(name))
+        sudo('rm /etc/supervisor/conf.d/uwsgi-{0}.conf'.format(name))
         # remove app
-        run('rm -rf {0}'.format(os.path.join(app_dir, name)))
-        run('rm -rf {0}'.format(os.path.join(ve_dir, name)))
+        sudo('rm -rf {0}'.format(os.path.join(app_dir, name)))
+        sudo('rm -rf {0}'.format(os.path.join(ve_dir, name)))
         # bounce nginx and supervisor
         sudo('service nginx reload')
         sudo('supervisorctl reload')
