@@ -142,7 +142,7 @@ To deploy an application, make sure there is a `wsgi.py` module in the root of t
 ```
 import os
 import django.core.handlers.wsgi
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "piiprovider.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myapp.settings")
 
 application = django.core.handlers.wsgi.WSGIHandler()
 ```
