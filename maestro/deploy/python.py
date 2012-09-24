@@ -164,6 +164,29 @@ def deploy(name=None, source=None, app_dir='/opt/apps', ve_dir='/opt/ve'):
 
 @task
 @hosts_required
+def restart(name=None):
+    """
+    Restarts specified application
+
+    :param name: Applicaiton name
+
+    """
+    sudo('supervisorctl restart uwsgi-{0}'.format(name))
+    sudo('service nginx reload')
+
+@task
+@hosts_required
+def stop(name=None):
+    """
+    Stops specified application
+
+    :param name: Applicaiton name
+
+    """
+    sudo('supervisorctl stop uwsgi-{0}'.format(name))
+
+@task
+@hosts_required
 def get_logs(name=None, num_of_lines=25):
     """
     Gets application logs
