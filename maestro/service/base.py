@@ -28,7 +28,9 @@ class BaseService(object):
         sudo('mkdir -p {0}'.format(self._conf_dir))
 
     def _teardown(self):
-        sudo('rm -rf {0}'.format(self._conf_dir))
+        # TODO: figure a way to clean entire dir
+        #sudo('rm -rf {0}'.format(self._conf_dir))
+        pass
 
     def _pre_provision(self):
         pass

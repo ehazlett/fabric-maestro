@@ -10,7 +10,7 @@ class MySQL(BaseService):
     def __init__(self, *args, **kwargs):
         super(MySQL, self).__init__(*args, **kwargs)
         self._service_name = 'mysql'
-        self._default_conf = '/etc/mysql/my.cnf'
+        self._default_conf = kwargs.get('default_conf', '/etc/mysql/my.cnf')
         self._default_user = 'root'
         self._default_password = kwargs.get('default_password', None)
         self._conf = os.path.join(self._conf_dir,
@@ -19,6 +19,7 @@ class MySQL(BaseService):
             '{0}-{1}.conf'.format(self._name, self._service_name))
         self._data_dir = os.path.join(self._conf_dir, self._service_name)
         self._mysql_user = 'mysql'
+        self._password = generate_password()
 
     def _provision(self, *args, **kwargs):
         # copy mysql config
@@ -53,14 +54,13 @@ redirect_stderr=true
             self._default_user, self._port)
         if self._default_password:
             mysql_cmd += " -p{0}".format(self._default_password)
-        password = generate_password()
         sudo("echo \"create user 'root'@'%' identified by '{0}';\" | {1}".format(
-            password, mysql_cmd))
+            self._password, mysql_cmd))
         sudo("echo \"grant all privileges on *.* to 'root'@'%' with grant option\" | {0}".format(
             mysql_cmd))
         print("MySQL service provisioned." \
             "  Username: root" \
-            "  Password: {0}".format(password))
+            "  Password: {0}".format(self._password))
 
     def _remove(self, *args, **kwargs):
         sudo("rm -rf {0}".format(self._conf))
@@ -84,7 +84,7 @@ def create(name=None, port=None):
 @hosts_required
 def remove(name=None):
     """
-    Provisions a new MySQL service
+    Removes a MySQL service
 
     :param name: Name of instance
 

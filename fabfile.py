@@ -17,6 +17,7 @@ from maestro import system as sys
 from maestro.deploy import python as py
 from maestro.utils import load_maestro_rc
 from maestro.service import mysql
+from maestro.service import redis
 # load the maestro resource file for provider keys
 load_maestro_rc()
 
