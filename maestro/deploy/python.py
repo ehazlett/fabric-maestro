@@ -76,7 +76,7 @@ def generate_nginx_config(app_name=None, urls=None, state_dir='/var/tmp',
     """
     if not app_name or not urls:
         raise RuntimeError('You must specify an app_name and urls')
-    cfg = 'upstream {0}_upstream {\n'.format(app_name)
+    cfg = 'upstream {0}_upstream {{\n'.format(app_name)
     cfg += '    server 0.0.0.0:{0};\n'.format(app_port)
     cfg += '}\n'
     cfg = 'server {\n'
