@@ -22,7 +22,8 @@ import tempfile
 import string
 from random import Random
 
-def generate_uwsgi_config(app_name=None, app_dir=None, ve_dir=None, state_dir='/var/tmp', **kwargs):
+def generate_uwsgi_config(app_name=None, app_dir=None, ve_dir=None,
+    state_dir='/var/tmp', app_port=8000, **kwargs):
     """
     Generates a uWSGI supervisor config
 
@@ -30,6 +31,7 @@ def generate_uwsgi_config(app_name=None, app_dir=None, ve_dir=None, state_dir='/
     :param app_dir: Directory for app
     :param ve_dir: Virtualenv directory
     :param state_dir: Application state dir (default: /var/tmp)
+    :param app_port: Application port
 
     """
     uwsgi_config = '[program:uwsgi-{0}]\n'.format(app_name)
@@ -40,7 +42,7 @@ def generate_uwsgi_config(app_name=None, app_dir=None, ve_dir=None, state_dir='/
         uwsgi_config += '  --chown-socket {0}\n'.format(kwargs.get('user'))
     if 'group' in kwargs:
         uwsgi_config += '  --gid {0}\n'.format(kwargs.get('group'))
-    uwsgi_config += '  -s {0}\n'.format(os.path.join(state_dir, '{0}.sock'.format(app_name)))
+    uwsgi_config += '  --http-socket 0.0.0.0 {0}\n'.format(port)
     uwsgi_config += '  -H {0}\n'.format(os.path.join(ve_dir, app_name))
     uwsgi_config += '  -M\n'
     uwsgi_config += '  -p 2\n'
@@ -61,24 +63,32 @@ def generate_uwsgi_config(app_name=None, app_dir=None, ve_dir=None, state_dir='/
     uwsgi_config += 'stopsignal=QUIT\n'
     return uwsgi_config
 
-def generate_nginx_config(app_name=None, urls=None, state_dir='/var/tmp', **kwargs):
+def generate_nginx_config(app_name=None, urls=None, state_dir='/var/tmp',
+    app_port=8000, **kwargs):
     """
     Generates an nginx config
 
     :param app_name: Name of application
     :param urls: List of public urls as strings
     :param state_dir: Application state dir (default: /var/tmp)
+    :param app_port: Application port
 
     """
     if not app_name or not urls:
         raise RuntimeError('You must specify an app_name and urls')
+    cfg = 'upstream {0}_upstream {\n'.format(app_name)
+    cfg += '    server 0.0.0.0:{0};\n'.format(app_port)
+    cfg += '}\n'
     cfg = 'server {\n'
     cfg += '    listen 80;\n'
     cfg += '    server_name {0};\n'.format(' '.join(urls))
     cfg += '    server_name_in_redirect off;\n'
     cfg += '    location / {\n'
-    cfg += '        include uwsgi_params;\n'
-    cfg += '        uwsgi_pass unix://{0}/{1}.sock;\n'.format(state_dir, app_name)
+    cfg += '        proxy_redirect off ;\n'
+    cfg += '        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;\n'
+    cfg += '        proxy_set_header X-Real-IP        $remote_addr;\n'
+    cfg += '        proxy_set_header Host             $host;\n'
+    cfg += '        proxy_pass http://{0}_upstream;\n'.format(app_name)
     cfg += '    }\n'
     cfg += '}\n'
     return cfg
@@ -86,7 +96,8 @@ def generate_nginx_config(app_name=None, urls=None, state_dir='/var/tmp', **kwar
 
 @task
 @hosts_required
-def create_app(name=None, urls=None, py_version='26', app_dir='/opt/apps', ve_dir='/opt/ve'):
+def create_app(name=None, urls=None, py_version='26', app_dir='/opt/apps',
+    ve_dir='/opt/ve', app_port=8000):
     """
     Creates a new application container
 
@@ -95,6 +106,7 @@ def create_app(name=None, urls=None, py_version='26', app_dir='/opt/apps', ve_di
     :param py_version: Version of Python to use (default: 26)
     :param app_dir: Root directory for applications (default: /opt/apps)
     :param ve_dir: Root directory for virtualenvs (default: /opt/ve)
+    :param app_port: Application port
 
     """
     if not name or not urls:
