@@ -79,7 +79,7 @@ def generate_nginx_config(app_name=None, urls=None, state_dir='/var/tmp',
     cfg = 'upstream {0}_upstream {{\n'.format(app_name)
     cfg += '    server 0.0.0.0:{0};\n'.format(app_port)
     cfg += '}\n'
-    cfg = 'server {\n'
+    cfg += 'server {\n'
     cfg += '    listen 80;\n'
     cfg += '    server_name {0};\n'.format(' '.join(urls))
     cfg += '    server_name_in_redirect off;\n'
@@ -121,7 +121,8 @@ def create_app(name=None, urls=None, py_version='26', app_dir='/opt/apps',
         nginx_tmp_conf = tempfile.mktemp()
         # create nginx config
         with open(nginx_tmp_conf, 'w') as f:
-            f.write(generate_nginx_config(app_name=name, urls=urls.split(';')))
+            f.write(generate_nginx_config(app_name=name, urls=urls.split(';'),
+                app_port=app_port))
         put(uwsgi_tmp_conf, '/etc/supervisor/conf.d/uwsgi-{0}.conf'.format(name), mode=0755, use_sudo=True)
         put(nginx_tmp_conf, '/etc/nginx/conf.d/{0}.conf'.format(name), mode=0755, use_sudo=True)
         # update supervisor
