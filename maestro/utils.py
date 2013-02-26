@@ -1,20 +1,22 @@
 #!/usr/bin/env python
-#    Copyright 2012 Maestro Project
+# Copyright 2012 Maestro Project
 #
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#       http://www.apache.org/licenses/LICENSE-2.0
+#    http://www.apache.org/licenses/LICENSE-2.0
 #
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 import os
 from fabric.api import env
 from maestro import config
+import random
+import string
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 
@@ -62,3 +64,12 @@ def load_env_keys():
     # check provider keys
     if not env.provider_keys:
         raise RuntimeError('You must use environment variables to use cloud nodes.  See the documentation for details')
+
+def generate_password(length=12):
+    """
+    Generates a random password
+
+    :param length: Length of password
+
+    """
+    return ''.join(random.sample(string.letters+string.digits, length))

@@ -77,7 +77,10 @@ def update_check():
 
     """
     with default_settings():
-        run('cat /var/lib/update-notifier/updates-available')
+        sudo('apt-get update > /dev/null 2>&1')
+        run('if [ -e /var/lib/update-notifier/updates-available ]; then cat '\
+            '/var/lib/update-notifier/updates-available; else '\
+            'echo "Unavailable"; fi')
 
 @task
 @hosts_required

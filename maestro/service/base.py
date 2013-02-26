@@ -27,6 +27,11 @@ class BaseService(object):
     def _setup(self):
         sudo('mkdir -p {0}'.format(self._conf_dir))
 
+    def _teardown(self):
+        # TODO: figure a way to clean entire dir
+        #sudo('rm -rf {0}'.format(self._conf_dir))
+        pass
+
     def _pre_provision(self):
         pass
 
@@ -34,10 +39,30 @@ class BaseService(object):
         pass
 
     def _provision(self, *args, **kwargs):
-        raise NotImplemented
+        raise NotImplementedError
+
+    def _pre_remove(self):
+        pass
+
+    def _post_remove(self):
+        pass
+
+    def _remove(self, *args, **kwargs):
+        pass
+
+    def _refresh_supervisor(self):
+        sudo('supervisorctl update')
 
     def provision(self):
         self._setup()
         self._pre_provision()
         self._provision()
+        self._refresh_supervisor()
         self._post_provision()
+
+    def remove(self):
+        self._pre_remove()
+        self._remove()
+        self._post_remove()
+        self._teardown()
+        self._refresh_supervisor()
