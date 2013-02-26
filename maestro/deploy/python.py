@@ -42,7 +42,7 @@ def generate_uwsgi_config(app_name=None, app_dir=None, ve_dir=None,
         uwsgi_config += '  --chown-socket {0}\n'.format(kwargs.get('user'))
     if 'group' in kwargs:
         uwsgi_config += '  --gid {0}\n'.format(kwargs.get('group'))
-    uwsgi_config += '  --http-socket 0.0.0.0 {0}\n'.format(port)
+    uwsgi_config += '  --http-socket 0.0.0.0 {0}\n'.format(app_port)
     uwsgi_config += '  -H {0}\n'.format(os.path.join(ve_dir, app_name))
     uwsgi_config += '  -M\n'
     uwsgi_config += '  -p 2\n'
