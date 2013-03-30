@@ -19,10 +19,16 @@ from maestro.utils import load_maestro_rc
 from maestro.service import mysql
 from maestro.service import redis
 from maestro.service import memcached
+from maestro.crate import management as crate
 # load the maestro resource file for provider keys
 load_maestro_rc()
 
 import os
+import logging
+# change log levels
+logging.getLogger('paramiko').setLevel(logging.ERROR)
 # try to load env password
 from fabric.api import env
 env.password = os.environ.get('FABRIC_PASSWORD')
+if not env.parallel:
+    env.output_prefix = False

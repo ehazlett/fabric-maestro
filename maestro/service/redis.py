@@ -10,7 +10,7 @@ class Redis(BaseService):
     def __init__(self, *args, **kwargs):
         super(Redis, self).__init__(*args, **kwargs)
         self._service_name = 'redis'
-        self._default_conf = kwargs.get('default_conf', '/etc/redis.conf')
+        self._default_conf = kwargs.get('default_conf', '/etc/redis/redis.conf')
         self._conf = os.path.join(self._conf_dir,
             '{0}.conf'.format(self._service_name))
         self._supervisor_conf = os.path.join(self._supervisor_conf_dir,

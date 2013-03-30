@@ -14,5 +14,14 @@ Vagrant::Config.run do |config|
   config.vm.forward_port 10002, 10002 # services
   config.vm.forward_port 10003, 10003 # services
   config.vm.forward_port 10004, 10004 # services
-  config.vm.customize ["modifyvm", :id, "--memory", 1024]
+end
+Vagrant.configure("2") do |config|
+  # virtualbox config
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", 1024]
+  end
+  # vmware
+  config.vm.provider :vmware_fusion do |v|
+    v.vmx["memsize"] = "1024"
+  end
 end

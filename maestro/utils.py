@@ -42,8 +42,9 @@ def load_maestro_rc(rc_file=os.path.expanduser('~/.maestrorc')):
     """
     if os.path.exists(rc_file):
         for l in open(rc_file).read().splitlines():
-            k,v = l.split('=')
-            os.environ[k] = v
+            if not l.startswith('#'):
+                k,v = l.split('=')
+                os.environ[k] = v
 
 def load_env_keys():
     """
@@ -73,3 +74,4 @@ def generate_password(length=12):
 
     """
     return ''.join(random.sample(string.letters+string.digits, length))
+

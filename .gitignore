@@ -1,9 +1,10 @@
 *.pyc
-*.swp
+*.sw*
 local_settings.py
 *.log
 .DS_Store*
 MANIFEST
 dist/*
 *.un*
-.vagrant
+.vagrant*
+*.gz

@@ -103,3 +103,4 @@ def uptime():
     """
     with default_settings():
         run('uptime')
+

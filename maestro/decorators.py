@@ -48,7 +48,33 @@ def valid_provider_required(f):
                     if p not in cloud_providers:
                         invalid_provider = p
         if invalid_provider:
-            raise ValueError('Invalid provider {0}.  Available: {1}'.format( \
+            raise StandardError('Invalid provider {0}.  Available: {1}'.format(
                 invalid_provider, ','.join(cloud_providers)))
         return f(*args, **kwargs)
     return decorated
+
+def provider_required(provider=None):
+    def real_dec(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            cloud_providers = config.AVAILABLE_CLOUD_PROVIDERS
+            invalid_provider = False
+            if not args and not kwargs:
+                raise RuntimeError('You must specify a provider')
+            # check required provider
+            if provider:
+                if len(args) > 0 and args[0].lower() != provider:
+                    invalid_provider = True
+            else:
+                if len(args) > 0 and args[0].lower() not in cloud_providers:
+                    invalid_provider = True
+                if len(kwargs) > 0:
+                    if 'provider' in kwargs:
+                        if kwargs.get('provider') != provider:
+                            invalid_provider = True
+            if invalid_provider:
+                raise StandardError('Invalid provider. Only {0} allowed'.format(
+                    provider))
+            return f(*args, **kwargs)
+        return decorated
+    return real_dec
